@@ -62,6 +62,11 @@ public class TBcastOffRow implements Serializable {
     @ApiModelProperty(value = "行落地情形 0未销 1已收下 2已退回")
     private Integer status;
 
+    /** 归档标记 0现行名册 1已挪出另放(连续两报送季未销) */
+    @TableField("archived")
+    @ApiModelProperty(value = "归档标记 0现行名册 1已挪出另放")
+    private Integer archived;
+
     /** 删除标记 0正常 1删除 */
     @TableField("del_flag")
     @ApiModelProperty(value = "删除标记 0正常 1删除")
@@ -148,6 +153,14 @@ public class TBcastOffRow implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getArchived() {
+        return archived;
+    }
+
+    public void setArchived(Integer archived) {
+        this.archived = archived;
     }
 
     public Integer getDelFlag() {

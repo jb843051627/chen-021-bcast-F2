@@ -26,14 +26,37 @@ CREATE TABLE IF NOT EXISTS t_bcast_off_row (
   qty decimal(12,2) DEFAULT NULL COMMENT '本行停播分钟数',
   hours_num decimal(12,2) DEFAULT NULL COMMENT '本季满播小时数',
   status int DEFAULT NULL COMMENT '行落地情形 0未销 1已收下 2已退回',
+  archived int DEFAULT '0' COMMENT '归档标记 0现行名册 1已挪出另放(连续两报送季未销)',
+  del_flag int DEFAULT '0' COMMENT '删除标记 0正常 1删除',
+  create_by varchar(64) DEFAULT NULL COMMENT '创建者',
+  create_time datetime DEFAULT NULL COMMENT '创建时间',
+  update_by varchar(64) DEFAULT NULL COMMENT '更新者',
+  update_time datetime DEFAULT NULL COMMENT '更新时间',
+  remark varchar(500) DEFAULT NULL COMMENT '备注（退回缘由也落这一行）',
+  PRIMARY KEY (id),
+  KEY idx_off_row_batch (batch_no),
+  KEY idx_off_row_item (item_code, archived, del_flag)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='运行情况报送核收行';
+
+-- 一册一簿：批号进门定死，回执三数随册物化，不允许在屏上临时点数
+CREATE TABLE IF NOT EXISTS t_bcast_off_book (
+  id bigint NOT NULL COMMENT '主键',
+  batch_no varchar(64) NOT NULL COMMENT '运行情况报送册批号（全库唯一，进门定死）',
+  season varchar(16) DEFAULT NULL COMMENT '报送季 形如 2026Q3',
+  row_count int DEFAULT '0' COMMENT '回执：本册行数（库内逐行点齐，非屏上点数）',
+  accepted_count int DEFAULT '0' COMMENT '回执：收下行数',
+  returned_count int DEFAULT '0' COMMENT '回执：退回行数（accepted+returned=row_count）',
+  receipt varchar(16) DEFAULT NULL COMMENT '回执栏 核讫/空册',
+  status int DEFAULT '0' COMMENT '册子情形 0在册 1已撤（撤册后行一并作删除标记）',
   del_flag int DEFAULT '0' COMMENT '删除标记 0正常 1删除',
   create_by varchar(64) DEFAULT NULL COMMENT '创建者',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_by varchar(64) DEFAULT NULL COMMENT '更新者',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   remark varchar(500) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='运行情况报送核收行';
+  PRIMARY KEY (id),
+  KEY idx_off_book_batch_alive (batch_no, del_flag)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='运行情况报送册总簿';
 
 CREATE TABLE IF NOT EXISTS t_bcast_pre_line (
   id bigint NOT NULL COMMENT '主键',
