@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS t_bcast_off_row (
   qty decimal(12,2) DEFAULT NULL COMMENT '本行停播分钟数',
   hours_num decimal(12,2) DEFAULT NULL COMMENT '本季满播小时数',
   status int DEFAULT NULL COMMENT '行落地情形 0未销 1已收下 2已退回',
+  arc_flag int DEFAULT '0' COMMENT '挪出标记 0现行 1已挪出(连着两个报送季未销，挪出现行名册；不是抹掉，老册照翻)',
   del_flag int DEFAULT '0' COMMENT '删除标记 0正常 1删除',
   create_by varchar(64) DEFAULT NULL COMMENT '创建者',
   create_time datetime DEFAULT NULL COMMENT '创建时间',

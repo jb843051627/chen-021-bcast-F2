@@ -62,6 +62,11 @@ public class TBcastOffRow implements Serializable {
     @ApiModelProperty(value = "行落地情形 0未销 1已收下 2已退回")
     private Integer status;
 
+    /** 挪出标记 0现行 1已挪出(连着两个报送季未销，挪出现行名册；不是抹掉，老册照翻) */
+    @TableField("arc_flag")
+    @ApiModelProperty(value = "挪出标记 0现行 1已挪出")
+    private Integer arcFlag;
+
     /** 删除标记 0正常 1删除 */
     @TableField("del_flag")
     @ApiModelProperty(value = "删除标记 0正常 1删除")
@@ -148,6 +153,14 @@ public class TBcastOffRow implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getArcFlag() {
+        return arcFlag;
+    }
+
+    public void setArcFlag(Integer arcFlag) {
+        this.arcFlag = arcFlag;
     }
 
     public Integer getDelFlag() {
